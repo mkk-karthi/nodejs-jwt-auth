@@ -1,7 +1,7 @@
 {
   "name": "express-microservice-auth",
   "version": "1.0.0",
-  "description": "express microservice",
+  "description": "express microservice with auth (jwt)",
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test npx jest --detectOpenHandles",
@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@joi/date": "^2.1.1",
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
@@ -23,6 +24,7 @@
     "express-rate-limit": "^8.0.1",
     "helmet": "^8.1.0",
     "joi": "^18.0.0",
+    "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "mysql2": "^3.14.3",
     "pm2": "^6.0.8",

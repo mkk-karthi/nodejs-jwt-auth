@@ -2,6 +2,7 @@ const Joi = require("joi").extend(require("@joi/date"));
 const sequelize = require("sequelize");
 const Path = require("path");
 const fs = require("fs");
+
 const User = require("../models/user");
 const helpers = require("../helpers");
 const logger = require("../services/logger");
@@ -47,6 +48,19 @@ module.exports = {
           .min("1970-01-01")
           .max("2020-12-30")
           .empty(""),
+        password: Joi.string()
+          .pattern(new RegExp(config.passwordPattern))
+          .required()
+          .messages({
+            "string.pattern.base": "{#label} is invalid",
+          }),
+        confirmPassword: Joi.string()
+          .valid(Joi.ref("password"))
+          .required()
+          .label("Confirm Password")
+          .messages({
+            "any.only": "{#label} must match Password",
+          }),
 
         avatar: Joi.object({
           originalname: Joi.string()
@@ -102,6 +116,7 @@ module.exports = {
           let user = await User.create({
             name: value.name,
             email: value.email,
+            password: value.password,
             dob: value.dob,
             avatar: uploadPath,
             status: value.status,

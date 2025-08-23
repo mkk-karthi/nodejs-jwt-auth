@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../services/database");
+const bcrypt = require("bcrypt");
 
 const User = sequelize.define(
   "users",
@@ -19,11 +20,15 @@ const User = sequelize.define(
       allowNull: false,
       unique: true,
     },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     dob: {
       type: DataTypes.DATEONLY,
     },
-    avatar:{
-      type: DataTypes.STRING
+    avatar: {
+      type: DataTypes.STRING,
     },
     status: {
       type: DataTypes.ENUM("1", "2"),
@@ -40,5 +45,27 @@ const User = sequelize.define(
     },
   }
 );
+
+const encryptPassword = async (user, options) => {
+  // bcrypt password
+  if (user.password) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
+  }
+};
+
+User.beforeCreate(encryptPassword);
+User.beforeUpdate(encryptPassword);
+
+User.beforeBulkCreate(async (users, options) => {
+  for (const user of users) {
+    if (user.password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(user.password, salt);
+      user.password = hashedPassword;
+    }
+  }
+});
 
 module.exports = User;

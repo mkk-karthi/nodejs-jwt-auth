@@ -1,14 +1,18 @@
 const User = require("../models/user");
 
-module.exports = () => {
-  User.create({
-    name: "admin",
-    email: "admin@gmail.com",
-    status: "1",
-  });
-  User.create({
-    name: "user",
-    email: "user@gmail.com",
-    status: "2",
-  });
+module.exports = async () => {
+  await User.bulkCreate([
+    {
+      name: "admin",
+      email: "admin@gmail.com",
+      password: "Admin@123",
+      status: "1",
+    },
+    {
+      name: "user",
+      email: "user@gmail.com",
+      password: "User@123",
+      status: "2",
+    },
+  ]);
 };

@@ -3,13 +3,23 @@ const upload = require("../services/multer");
 const router = express.Router();
 const apiRouter = express.Router();
 
-const userController = require("../controllers/userController");
-apiRouter.get("/users", userController.list);
-apiRouter.post("/user", upload.single("avatar"), userController.create);
-apiRouter.get("/user/:id", userController.view);
-apiRouter.put("/user/:id", upload.single("avatar"), userController.update);
-apiRouter.delete("/user/:id", userController.delete);
+const authMiddleware = require("../middleware/authMiddleware");
+const authRoute = require("./authRoutes");
 
+// user model
+const userController = require("../controllers/userController");
+apiRouter.get("/users", authMiddleware, userController.list);
+apiRouter.post("/user", upload.single("avatar"), userController.create);
+apiRouter.get("/user/:id", authMiddleware, userController.view);
+apiRouter.put(
+  "/user/:id",
+  authMiddleware,
+  upload.single("avatar"),
+  userController.update
+);
+apiRouter.delete("/user/:id", authMiddleware, userController.delete);
+
+apiRouter.use("/", authRoute);
 router.use("/api", apiRouter);
 
 router.get("/", (req, res) => {
@@ -170,6 +180,7 @@ module.exports = router;
  *       required:
  *         - name
  *         - email
+ *         - password
  *       properties:
  *         id:
  *           type: string
@@ -178,6 +189,8 @@ module.exports = router;
  *         name:
  *           type: string
  *         email:
+ *           type: string
+ *         password:
  *           type: string
  *         dob:
  *           type: string
@@ -195,6 +208,7 @@ module.exports = router;
  *         id: a646e9a74ca5affc4e3e65c4394813f7
  *         name: John Doe
  *         email: john.doe@example.com
+ *         password: Password@123
  *         dob: 2000-06-12
  *         avatar: ''
  *         status: 1

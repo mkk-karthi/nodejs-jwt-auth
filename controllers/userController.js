@@ -65,10 +65,8 @@ module.exports = {
         avatar: Joi.object({
           originalname: Joi.string()
             .required()
-            .pattern(/\.(jpg|jpeg|png|gif)$/i)
-            .message(
-              "File must be an image (jpg, jpeg, png, gif) or document (pdf, doc, docx)"
-            ),
+            .pattern(/\.(jpg|jpeg|png)$/i)
+            .message("File must be an image (jpg, jpeg, png)"),
           mimetype: Joi.string()
             .required()
             .valid("image/jpeg", "image/png", "image/gif")
@@ -76,7 +74,7 @@ module.exports = {
               "any.only": "Invalid file type",
             }),
           size: Joi.number()
-            .max(config.maxFileSize * 1024 * 1024) // 10MB max
+            .max(config.avatarMaxFileSize * 1024 * 1024)
             .required()
             .messages({
               "number.max": "File size must be less than 10MB",
@@ -190,10 +188,8 @@ module.exports = {
         avatar: Joi.object({
           originalname: Joi.string()
             .required()
-            .pattern(/\.(jpg|jpeg|png|gif)$/i)
-            .message(
-              "File must be an image (jpg, jpeg, png, gif) or document (pdf, doc, docx)"
-            ),
+            .pattern(/\.(jpg|jpeg|png)$/i)
+            .message("File must be an image (jpg, jpeg, png)"),
           mimetype: Joi.string()
             .required()
             .valid("image/jpeg", "image/png", "image/gif")
@@ -201,7 +197,7 @@ module.exports = {
               "any.only": "Invalid file type",
             }),
           size: Joi.number()
-            .max(config.maxFileSize * 1024 * 1024) // 10MB max
+            .max(config.avatarMaxFileSize * 1024 * 1024)
             .required()
             .messages({
               "number.max": "File size must be less than 10MB",
@@ -210,7 +206,7 @@ module.exports = {
           .unknown()
           .empty(""),
       })
-        .or("name", "email", "status", "dob")
+        .or("name", "email", "status", "dob", "avatar")
         .unknown()
         .required();
 

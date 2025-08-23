@@ -11,7 +11,8 @@ module.exports = {
     upload: "uploads",
     log: "logs",
   },
-  maxFileSize: 5, // 5MB
+  commonMaxFileSize: 10,  // 10MB
+  avatarMaxFileSize: 5,   // 5MB
   multerFileTypeError: "INVALID_FILE_TYPE",
   passwordPattern:
     "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@.#$!%*?&^])[A-Za-z0-9@.#$!%*?&]{8,}$",

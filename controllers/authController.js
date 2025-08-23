@@ -7,7 +7,7 @@ const User = require("../models/user");
 const RefreshToken = require("../models/refreshToken");
 const logger = require("../services/logger");
 const config = require("../config");
-const Otp = require("../models/otp");
+const Otp = require("../models/Otp");
 const transporter = require("../services/mail");
 
 const generateAccessToken = (user) => {
@@ -79,7 +79,7 @@ module.exports = {
 
         // generate access and refresh Token
         delete user["password"];
-        const accessToken = await generateAccessToken(user);
+        const accessToken = generateAccessToken(user);
         const refreshToken = await generateRefreshToken(user);
 
         helpers.response(res, "Login successfully", {
@@ -99,7 +99,7 @@ module.exports = {
     try {
       const { token } = req.body;
       if (!token) {
-        return helpers.response(res, "Token is required", {}, 401);
+        return helpers.response(res, "Token is required", {}, 400);
       }
 
       // fecth token data by token
@@ -111,7 +111,7 @@ module.exports = {
       // check token expiry
       if (refreshToken.expiry.getTime() < new Date().getTime()) {
         await refreshToken.destroy();
-        return helpers.response(res, "Invalid token", {}, 400);
+        return helpers.response(res, "Token expired", {}, 400);
       }
 
       // verify the token
@@ -143,7 +143,7 @@ module.exports = {
     try {
       const { token } = req.body;
       if (!token) {
-        return helpers.response(res, "Refresh token is required", {}, 401);
+        return helpers.response(res, "Token is required", {}, 400);
       }
 
       // delete the token in db
@@ -273,7 +273,7 @@ module.exports = {
             return helpers.response(res, "OTP sended");
           });
         } else {
-          helpers.response(res, "OTP sended");
+          helpers.response(res, "OTP sended");  // security purpose
         }
       }
     } catch (err) {

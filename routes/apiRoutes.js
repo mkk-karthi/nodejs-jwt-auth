@@ -1,12 +1,13 @@
 const express = require("express");
+const upload = require("../services/multer");
 const router = express.Router();
 const apiRouter = express.Router();
 
 const userController = require("../controllers/userController");
 apiRouter.get("/users", userController.list);
-apiRouter.post("/user", userController.create);
+apiRouter.post("/user", upload.single("avatar"), userController.create);
 apiRouter.get("/user/:id", userController.view);
-apiRouter.put("/user/:id", userController.update);
+apiRouter.put("/user/:id", upload.single("avatar"), userController.update);
 apiRouter.delete("/user/:id", userController.delete);
 
 router.use("/api", apiRouter);
@@ -181,6 +182,9 @@ module.exports = router;
  *         dob:
  *           type: string
  *           description: Date Of Birth
+ *         avatar:
+ *           type: string
+ *           description: Avatar image
  *         status:
  *           type: integer
  *           description: 1-active, 2-inactive
@@ -192,6 +196,7 @@ module.exports = router;
  *         name: John Doe
  *         email: john.doe@example.com
  *         dob: 2000-06-12
+ *         avatar: ''
  *         status: 1
  *     ApiResponse:
  *       type: object

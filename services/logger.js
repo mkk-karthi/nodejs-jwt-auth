@@ -1,5 +1,6 @@
 const { createLogger, format, transports } = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
+const path = require("path");
 const config = require("../config");
 
 const logger = createLogger({
@@ -12,7 +13,7 @@ const logger = createLogger({
       zippedArchive: true,
       maxSize: config.winston.maxSize,
       maxFiles: config.winston.maxFiles,
-      dirname: config.fileDir.log,
+      dirname: path.join("storage", config.fileDir.log),
       level: "error",
     }),
     new DailyRotateFile({
@@ -21,7 +22,7 @@ const logger = createLogger({
       zippedArchive: true,
       maxSize: config.winston.maxSize,
       maxFiles: config.winston.maxFiles,
-      dirname: config.fileDir.log,
+      dirname: path.join("storage", config.fileDir.log),
     }),
   ],
 });

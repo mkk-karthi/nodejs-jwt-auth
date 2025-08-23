@@ -1,7 +1,7 @@
 {
-  "name": "express-scaffolding",
+  "name": "express-microservice-auth",
   "version": "1.0.0",
-  "description": "express scaffolding javascript",
+  "description": "express microservice",
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test npx jest --detectOpenHandles",
@@ -9,7 +9,7 @@
     "start": "pm2 start index.js",
     "dev": "nodemon index.js",
     "db:migrate": "node migrate.js",
-    "db:rollback": "node migrate.js rollback",
+    "db:refresh": "node migrate.js refresh",
     "db:seed": "node seeder.js"
   },
   "author": "",
@@ -23,6 +23,7 @@
     "express-rate-limit": "^8.0.1",
     "helmet": "^8.1.0",
     "joi": "^18.0.0",
+    "multer": "^2.0.2",
     "mysql2": "^3.14.3",
     "pm2": "^6.0.8",
     "sequelize": "^6.37.7",

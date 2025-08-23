@@ -22,6 +22,9 @@ const User = sequelize.define(
     dob: {
       type: DataTypes.DATEONLY,
     },
+    avatar:{
+      type: DataTypes.STRING
+    },
     status: {
       type: DataTypes.ENUM("1", "2"),
       defaultValue: "1",
@@ -31,7 +34,7 @@ const User = sequelize.define(
   {
     timestamps: true,
     defaultScope: {
-      attributes: ["id", "name", "email", "dob", "status"],
+      attributes: ["id", "name", "email", "dob", "avatar", "status"],
       order: ["id"],
       limit: 10,
     },

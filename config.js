@@ -1,15 +1,18 @@
 module.exports = {
   appName: "Microservices in Express.js",
+  appPath: __dirname,
   rateLimit: {
     maxReq: 100,
     maxMin: 15,
   },
   whiteListOrigins: ["localhost:8080"],
   fileDir: {
-    temp: "storage/temp",
-    upload: "storage/uploads",
-    log: "storage/logs",
+    temp: "temp",
+    upload: "uploads",
+    log: "logs",
   },
+  maxFileSize: 5, // 5MB
+  multerFileTypeError: "INVALID_FILE_TYPE",
 
   winston: {
     maxSize: "20m",

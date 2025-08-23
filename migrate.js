@@ -20,7 +20,7 @@ fs.readdirSync(path.join(__dirname, "models"))
   });
 
 const run = async () => {
-  if (process.argv.slice(2).includes("rollback")) {
+  if (process.argv.slice(2).includes("refresh")) {
     await sequelize.sync({ force: true });
   } else {
     await sequelize.sync({ alter: true });

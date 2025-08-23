@@ -38,7 +38,7 @@ app.use(
 );
 
 // setup logger middleware
-const logger = require("./libs/logger");
+const logger = require("./services/logger");
 app.use((req, res, next) => {
   req.logger = logger;
   const { method, url, ip } = req;
@@ -49,12 +49,12 @@ app.use((req, res, next) => {
     method: method,
     url: url,
     ip: ip,
-    statusCode: res.statusCode
+    statusCode: res.statusCode,
   });
 });
 
 // config swagger
-const { swaggerUi, swaggerSpec } = require("./libs/swagger");
+const { swaggerUi, swaggerSpec } = require("./services/swagger");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // config cors
@@ -73,9 +73,20 @@ const router = require("./routes/apiRoutes");
 app.use("/", cors(corsOptions), router);
 
 // error handling middleware
+const multer = require("multer");
+const helpers = require("./helpers");
 app.use((err, req, res, next) => {
   logger.error("Express error:", err);
-  res.status(500).send("Internal server error");
+
+  // multer error
+  if (
+    err instanceof multer.MulterError ||
+    [config.multerFileTypeError].includes(err.message)
+  ) {
+    helpers.response(res, "File not uploaded", {}, 500);
+  } else {
+    helpers.response(res, "Internal server error", {}, 500);
+  }
 });
 
 module.exports = app;

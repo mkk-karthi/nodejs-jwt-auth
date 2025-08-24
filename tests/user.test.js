@@ -38,133 +38,143 @@ afterAll(async () => {
 
 describe("create user", () => {
   it("name validation", async () => {
-    const res = await request(app).post("/api/user").send({
-      name: "it",
-      email: "test@gmail.com",
-      dob: "2020-01-01",
-      password: "Test@123",
-      status: "1",
-    });
+    const res = await request(app)
+      .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "it",
+        email: "test@gmail.com",
+        dob: "2020-01-01",
+        password: "Test@123",
+        status: "1",
+      });
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message.includes("name")).toBeTruthy();
   });
 
   it("email validation", async () => {
-    const res = await request(app).post("/api/user").send({
-      name: "test",
-      email: 123,
-      dob: "2020-01-01",
-      password: "Test@123",
-      status: "1",
-    });
+    const res = await request(app)
+      .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "test",
+        email: 123,
+        dob: "2020-01-01",
+        password: "Test@123",
+        status: "1",
+      });
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message.includes("email")).toBeTruthy();
   });
 
   it("email validation: invalid mail", async () => {
-    const res = await request(app).post("/api/user").send({
-      name: "test",
-      email: "test@gmail.c",
-      dob: "2020-01-01",
-      password: "Test@123",
-      status: "1",
-    });
+    const res = await request(app)
+      .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "test",
+        email: "test@gmail.c",
+        dob: "2020-01-01",
+        password: "Test@123",
+        status: "1",
+      });
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message.includes("email")).toBeTruthy();
   });
 
   it("dob validation: invalid date", async () => {
-    const res = await request(app).post("/api/user").send({
-      name: "test",
-      email: "test@gmail.com",
-      dob: "2020",
-      password: "Test@123",
-      status: "1",
-    });
+    const res = await request(app)
+      .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "test",
+        email: "test@gmail.com",
+        dob: "2020",
+        password: "Test@123",
+        status: "1",
+      });
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message.includes("dob")).toBeTruthy();
   });
 
   it("dob validation: min date", async () => {
-    const res = await request(app).post("/api/user").send({
-      name: "test",
-      email: "test@gmail.com",
-      dob: "1960-01-01",
-      password: "Test@123",
-      status: "1",
-    });
+    const res = await request(app)
+      .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "test",
+        email: "test@gmail.com",
+        dob: "1960-01-01",
+        password: "Test@123",
+        status: "1",
+      });
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message.includes("dob")).toBeTruthy();
   });
 
   it("status validation", async () => {
-    const res = await request(app).post("/api/user").send({
-      name: "test",
-      email: "test@gmail.com",
-      dob: "2000-01-01",
-      password: "Test@123",
-      confirmPassword: "Test",
-      status: "3",
-    });
+    const res = await request(app)
+      .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "test",
+        email: "test@gmail.com",
+        dob: "2000-01-01",
+        password: "Test@123",
+        status: "3",
+      });
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message.includes("status")).toBeTruthy();
   });
 
   it("password validation", async () => {
-    const res = await request(app).post("/api/user").send({
-      name: "test",
-      email: "test@gmail.com",
-      dob: "2000-01-01",
-      password: "Test",
-      status: "1",
-    });
+    const res = await request(app)
+      .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "test",
+        email: "test@gmail.com",
+        dob: "2000-01-01",
+        password: "Test",
+        status: "1",
+      });
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message.includes("password")).toBeTruthy();
   });
 
-  it("confirmPassword validation", async () => {
-    const res = await request(app).post("/api/user").send({
-      name: "test",
-      email: "test@gmail.com",
-      dob: "2000-01-01",
-      password: "Test@123",
-      confirmPassword: "Test",
-      status: "1",
-    });
-
-    expect(res.statusCode).toEqual(400);
-    expect(res.body.message.includes("Confirm Password")).toBeTruthy();
-  });
-
   it("create sucessfull", async () => {
-    const res = await request(app).post("/api/user").send({
-      name: "test",
-      email: "tests@gmail.com",
-      dob: "2001-03-01",
-      password: "Test@123",
-      confirmPassword: "Test@123",
-      status: "1",
-    });
+    const res = await request(app)
+      .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "test",
+        email: "tests@gmail.com",
+        dob: "2001-03-01",
+        password: "Test@123",
+        status: "1",
+      });
 
     expect(res.statusCode).toEqual(200);
   });
 
   it("duplicate mail", async () => {
-    const res = await request(app).post("/api/user").send({
-      name: "test",
-      email: "tests@gmail.com",
-      dob: "2000-01-01",
-      password: "Test@123",
-      confirmPassword: "Test@123",
-      status: "1",
-    });
+    const res = await request(app)
+      .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "test",
+        email: "tests@gmail.com",
+        dob: "2000-01-01",
+        password: "Test@123",
+        status: "1",
+      });
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message.includes("email")).toBeTruthy();
@@ -398,12 +408,12 @@ describe("upload file - create", () => {
   it("invalid image", async () => {
     const res = await request(app)
       .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
       .attach("avatar", invalidImg)
       .field("name", "test")
       .field("email", "upload@gmail.com")
       .field("dob", "2000-01-01")
       .field("password", "Test@123")
-      .field("confirmPassword", "Test@123")
       .field("status", "1");
 
     expect(res.statusCode).toEqual(400);
@@ -415,12 +425,12 @@ describe("upload file - create", () => {
   it("large image", async () => {
     const res = await request(app)
       .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
       .attach("avatar", largeImg)
       .field("name", "test")
       .field("email", "upload@gmail.com")
       .field("dob", "2000-01-01")
       .field("password", "Test@123")
-      .field("confirmPassword", "Test@123")
       .field("status", "1");
 
     expect(res.statusCode).toEqual(400);
@@ -432,12 +442,12 @@ describe("upload file - create", () => {
   it("valid image", async () => {
     const res = await request(app)
       .post("/api/user")
+      .set("Authorization", `Bearer ${authToken}`)
       .attach("avatar", validImg)
       .field("name", "test")
       .field("email", "upload@gmail.com")
       .field("dob", "2000-01-01")
       .field("password", "Test@123")
-      .field("confirmPassword", "Test@123")
       .field("status", "1");
 
     expect(res.statusCode).toEqual(200);
@@ -466,13 +476,7 @@ describe("upload file - update", () => {
     const res = await request(app)
       .put(`/api/user/${encryptId}`)
       .set("Authorization", `Bearer ${authToken}`)
-      .attach("avatar", invalidImg)
-      .field("name", "test")
-      .field("email", "upload1@gmail.com")
-      .field("dob", "2000-01-01")
-      .field("password", "Test@123")
-      .field("confirmPassword", "Test@123")
-      .field("status", "1");
+      .attach("avatar", invalidImg);
 
     expect(res.statusCode).toEqual(400);
     expect(

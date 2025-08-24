@@ -9,7 +9,12 @@ const authRoute = require("./authRoutes");
 // user model
 const userController = require("../controllers/userController");
 apiRouter.get("/users", authMiddleware, userController.list);
-apiRouter.post("/user", upload.single("avatar"), userController.create);
+apiRouter.post(
+  "/user",
+  authMiddleware,
+  upload.single("avatar"),
+  userController.create
+);
 apiRouter.get("/user/:id", authMiddleware, userController.view);
 apiRouter.put(
   "/user/:id",
@@ -192,6 +197,7 @@ module.exports = router;
  *           type: string
  *         password:
  *           type: string
+ *           writeOnly: true
  *         dob:
  *           type: string
  *           description: Date Of Birth

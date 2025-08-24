@@ -5,6 +5,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const authController = require("../controllers/authController");
 
 // auth model
+router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.post("/logout", authMiddleware, authController.logout);
 router.post("/refresh-token", authController.refreshToken);
@@ -18,7 +19,52 @@ module.exports = router;
  * @swagger
  * tags:
  *   name: Auth
- *   description: User aauth management api
+ *   description: User auth management api
+ * /api/signup:
+ *   post:
+ *     summary: Register an user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *               - confirmPassword
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               confirmPassword:
+ *                 type: string
+ *             example:
+ *               name: John Doe
+ *               email: john.doe@example.com
+ *               password: Password@123
+ *               confirmPassword: Password@123
+ *           responses:
+ *             200:
+ *               description: Success
+ *               content:
+ *                 application/json:
+ *                   schema:
+ *                     type: object
+ *                     properties:
+ *                       code:
+ *                         type: integer
+ *                         example: 200
+ *                       message:
+ *                         type: string
+ *                         example: User registered
+ *             400:
+ *               description: Validation error
  * /api/login:
  *   post:
  *     summary: Login the user

@@ -54,13 +54,6 @@ module.exports = {
           .messages({
             "string.pattern.base": "{#label} is invalid",
           }),
-        confirmPassword: Joi.string()
-          .valid(Joi.ref("password"))
-          .required()
-          .label("Confirm Password")
-          .messages({
-            "any.only": "{#label} must match Password",
-          }),
 
         avatar: Joi.object({
           originalname: Joi.string()

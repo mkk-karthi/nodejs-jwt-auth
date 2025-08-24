@@ -30,6 +30,101 @@ afterAll(async () => {
   await sequelize.query("SET FOREIGN_KEY_CHECKS = 1;");
 });
 
+describe("signup user", () => {
+  it("name validation", async () => {
+    const res = await request(app).post("/api/signup").send({
+      name: "it",
+      email: "test@gmail.com",
+      dob: "2020-01-01",
+      password: "Test@123",
+      status: "1",
+    });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.message.includes("name")).toBeTruthy();
+  });
+
+  it("email validation", async () => {
+    const res = await request(app).post("/api/signup").send({
+      name: "test",
+      email: 123,
+      dob: "2020-01-01",
+      password: "Test@123",
+      status: "1",
+    });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.message.includes("email")).toBeTruthy();
+  });
+
+  it("email validation: invalid mail", async () => {
+    const res = await request(app).post("/api/signup").send({
+      name: "test",
+      email: "test@gmail.c",
+      dob: "2020-01-01",
+      password: "Test@123",
+      status: "1",
+    });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.message.includes("email")).toBeTruthy();
+  });
+
+  it("password validation", async () => {
+    const res = await request(app).post("/api/signup").send({
+      name: "test",
+      email: "test@gmail.com",
+      dob: "2000-01-01",
+      password: "Test",
+      status: "1",
+    });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.message.includes("password")).toBeTruthy();
+  });
+
+  it("confirmPassword validation", async () => {
+    const res = await request(app).post("/api/signup").send({
+      name: "test",
+      email: "test@gmail.com",
+      dob: "2000-01-01",
+      password: "Test@123",
+      confirmPassword: "Test",
+      status: "1",
+    });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.message.includes("Confirm Password")).toBeTruthy();
+  });
+
+  it("register sucessfull", async () => {
+    const res = await request(app).post("/api/signup").send({
+      name: "test",
+      email: "tests@gmail.com",
+      dob: "2001-03-01",
+      password: "Test@123",
+      confirmPassword: "Test@123",
+      status: "1",
+    });
+
+    expect(res.statusCode).toEqual(200);
+  });
+
+  it("duplicate mail", async () => {
+    const res = await request(app).post("/api/signup").send({
+      name: "test",
+      email: "tests@gmail.com",
+      dob: "2000-01-01",
+      password: "Test@123",
+      confirmPassword: "Test@123",
+      status: "1",
+    });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.message.includes("email")).toBeTruthy();
+  });
+});
+
 describe("login user", () => {
   it("email validation", async () => {
     const res = await request(app).post("/api/login").send({

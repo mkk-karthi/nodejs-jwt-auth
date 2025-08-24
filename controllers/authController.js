@@ -32,6 +32,61 @@ const generateRefreshToken = async (user) => {
 };
 
 module.exports = {
+  async signup(req, res) {
+    try {
+      // Validate the input
+      const schema = Joi.object({
+        name: Joi.string().min(3).max(30).required(),
+        email: Joi.string().email().required(),
+        password: Joi.string()
+          .pattern(new RegExp(config.passwordPattern))
+          .required()
+          .messages({
+            "string.pattern.base": "{#label} is invalid",
+          }),
+        confirmPassword: Joi.string()
+          .valid(Joi.ref("password"))
+          .required()
+          .label("Confirm Password")
+          .messages({
+            "any.only": "{#label} must match Password",
+          }),
+      })
+        .unknown()
+        .required();
+
+      const { value, error } = schema.validate({ ...req.body });
+
+      // validation error
+      if (error) {
+        helpers.response(res, error.details[0].message, {}, 400);
+      } else {
+        // chech email is already exist
+        let checkMail = await User.findOne({ where: { email: value.email } });
+
+        if (checkMail) {
+          helpers.response(res, "email already exist", {}, 400);
+        } else {
+          // insert user
+          let user = await User.create({
+            name: value.name,
+            email: value.email,
+            password: value.password,
+          });
+
+          if (user) {
+            helpers.response(res, "User registered");
+          } else {
+            helpers.response(res, "User not created");
+          }
+        }
+      }
+    } catch (e) {
+      logger.error("user register error:", e);
+      helpers.response(res, "Internal server error", {}, 500);
+    }
+  },
+
   async login(req, res) {
     try {
       // Validate the input
@@ -273,7 +328,7 @@ module.exports = {
             return helpers.response(res, "OTP sended");
           });
         } else {
-          helpers.response(res, "OTP sended");  // security purpose
+          helpers.response(res, "OTP sended"); // security purpose
         }
       }
     } catch (err) {

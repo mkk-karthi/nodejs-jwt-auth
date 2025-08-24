@@ -14,7 +14,7 @@ It integrates **Sequelize ORM** with migrations & seeders, JWT-based authenticat
 - **Database**: Sequelize with migrations & seeders  
 - **Security**: CORS & Helmet middleware  
 - **Logging**: Winston with `winston-daily-rotate-file`  
-- **API Documentation**: Swagger at [http://localhost:8888/api-docs/](http://localhost:8888/api-docs/)  
+- **API Documentation**: Swagger at [http://localhost:8000/api-docs/](http://localhost:8000/api-docs/)  
 - **Testing**: Jest & Supertest with coverage reports  
 - **Node Version**: Requires **Node.js >= 20.0.0**
 
@@ -108,7 +108,7 @@ npm run test:coverage
 ## 📖 API Documentation
 
 Swagger UI is available at:
-👉 [http://localhost:8888/api-docs/](http://localhost:8888/api-docs/)
+👉 [http://localhost:8000/api-docs/](http://localhost:8000/api-docs/)
 
 ---
 

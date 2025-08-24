@@ -1,5 +1,5 @@
 module.exports = {
-  collectCoverage: true,
+  collectCoverage: false,
   coveragePathIgnorePatterns: ['/node_modules/'],
   collectCoverageFrom: [],
   coverageDirectory: "coverage",
